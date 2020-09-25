@@ -42,7 +42,32 @@ namespace Множества {
 		My_Set ^A; //Изначальное множество
 		My_Set ^B; //Множество простых чисел
 		My_Set ^C; //Множество четных чисел
-
+		My_Set^ simple(My_Set^ ob)
+		{
+			My_Set^ B = gcnew My_Set();
+			for (int j = 0; j < ob->len; j++)
+			{
+				int counter = 0;
+				for (int k = 1; k <= ob->len; k++)
+				{
+					if (Convert::ToInt32(ob->el(j)) % k == 0) counter++;
+				}
+				if (counter == 2) B->Add(Convert::ToInt32(ob->el(j)));
+			}
+			return B;
+		}
+		My_Set^ even(My_Set^ ob)
+		{
+			My_Set^ B = gcnew My_Set();
+			for (int i; i < ob->len; i++)
+			{
+				if (Convert::ToInt32(ob->el(i)) % 2 == 0)
+				{
+					B->Add(Convert::ToInt32(ob->el(i)));
+				}
+			}
+			return B;
+		}
 	private: System::Windows::Forms::Label^ label1;
 	protected:
 	private: System::Windows::Forms::RichTextBox^ richTextBox1;
@@ -108,7 +133,6 @@ namespace Множества {
 			this->richTextBox1->Size = System::Drawing::Size(454, 48);
 			this->richTextBox1->TabIndex = 1;
 			this->richTextBox1->Text = L"";
-			this->richTextBox1->TextChanged += gcnew System::EventHandler(this, &MyForm::richTextBox1_TextChanged);
 			// 
 			// richTextBox2
 			// 
@@ -244,53 +268,63 @@ namespace Множества {
 #pragma endregion
 	private: System::Void button1_Click(System::Object^ sender, System::EventArgs^ e) 
 	{
-		if (textBox2->Text != "")
+		auto result = MessageBox::Show(
+			"Вы действительно хотите удалить элемент из множества?",
+			"Подтвердите удаление",
+			MessageBoxButtons::YesNo,
+			MessageBoxIcon::Question); 
+		if (result == System::Windows::Forms::DialogResult::Yes)
 		{
-			A = A - Convert::ToInt32(textBox2->Text);
-			this->richTextBox1->Text = A->ToString();
-			A->write_in_file("Числа.txt");
-
-			while (!(A->Is_Empty()))
+			if (textBox2->Text != "")
 			{
+				A = A - Convert::ToInt32(textBox2->Text);
+				this->richTextBox1->Text = A->ToString();
+				A->write_in_file("Числа.txt");
+
+				B->operator=(even(A));
+				this->richTextBox2->Text = B->ToString();
+
+				C->operator=(simple(A));
+				this->richTextBox3->Text = C->ToString();
 
 			}
-			B->operator=(A->even());
-			this->richTextBox2->Text = B->ToString();
-
-			C->operator=(A->simple());
-			this->richTextBox3->Text = C->ToString();
-
 		}
 	}
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
 	this->Close();
 }
-private: System::Void richTextBox1_TextChanged(System::Object^ sender, System::EventArgs^ e) {
-}
+
 private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
 	this->richTextBox1->Text = A->ToString();
 
-	B->operator=(A->even());
+	B->operator=(even(A));
 	this->richTextBox2->Text = B->ToString();
 
-	C->operator=(A->simple());
+	C->operator=(simple(A));
 	this->richTextBox3->Text = C->ToString();
 
 }
 private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e)
 {
-	if (textBox1->Text != "")
+	auto result = MessageBox::Show(
+		"Вы действительно хотите добавить элемент в множество?",
+		"Подтвердите добавление",
+		MessageBoxButtons::YesNo,
+		MessageBoxIcon::Question);
+	if (result == System::Windows::Forms::DialogResult::Yes)
 	{
-		A = A + Convert::ToInt32(textBox1->Text);
-		this->richTextBox1->Text = A->ToString();
-		A->write_in_file("Числа.txt");
+		if (textBox1->Text != "")
+		{
+			A = A + Convert::ToInt32(textBox1->Text);
+			this->richTextBox1->Text = A->ToString();
+			A->write_in_file("Числа.txt");
 
-		B->operator=(A->even());
-		this->richTextBox2->Text = B->ToString();
+			B->operator=(even(A));
+			this->richTextBox2->Text = B->ToString();
 
-
-		C->operator=(A->simple());
-		this->richTextBox3->Text = C->ToString();
+			C->operator=(simple(A));
+			this->richTextBox3->Text = C->ToString();
+		}
 	}
 }
 };

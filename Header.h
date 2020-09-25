@@ -19,6 +19,10 @@ public:
 		A = gcnew array <int>(MAX_SIZE);
 		Count = 0;
 	}
+	My_Set(array <int>^ mas, int len)
+	{
+		
+	}
 	bool Is_Empty()
 	{
 		return Count == 0;
@@ -27,7 +31,19 @@ public:
 	{
 		return Count == MAX_SIZE - 1;	// Размер ограничен.
 	}
+	property int len
+	{
+		int get()
+		{
+			return Count;
+		}
+	}
+	//Лен - получить длину множества
 
+	int^ el(int i) //Можем взять элемент по индексу
+	{
+		return A[i];
+	}
 	// Одна из важных операций: проверка вхождения элемента во множество:
 	// может быть типа bool, может быть типа int и возвращать индекс найденного.
 	int In(int a)
@@ -49,33 +65,7 @@ public:
 		else
 			return false;
 	}
-	My_Set^ even()
-	{
-		My_Set^ B = gcnew My_Set();
-		for (int i; i < Count; i++)
-		{
-			if (A[i] % 2 == 0)
-			{
-				B->Add(A[i]);
-			}
-		}
-		return B;
-	}
 
-	My_Set^ simple()
-	{
-		My_Set^ B = gcnew My_Set();
-		for (int j = 0; j < Count; j++)
-		{
-			int counter = 0;
-			for (int k = 1; k <= A[j]; k++)
-			{
-				if (A[j] % k == 0) counter++;
-			}
-			if (counter == 2) B->Add(A[j]);
-		}
-		return B;
-	}
 	// Перегрузить операцию +, добавление во множество.
 	My_Set^ operator + (int a)
 	{
@@ -160,9 +150,4 @@ public:
 		return line;
 	}
 
-
-	//bool operator_in(const string& key, const unordered_map<string, string>& data)
-	//{
-	//	return data.find(key) != data.end();
-	//}
 };
