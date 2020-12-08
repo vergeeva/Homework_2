@@ -334,6 +334,7 @@ namespace Множества {
 				richTextBox3->Text = C->ToString();
 
 			}
+			else MessageBox::Show("Введите число, которое хотите удалить", "Предупреждение");
 		}
 	}
 private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e) {
@@ -373,6 +374,7 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 			C = simple(A);
 			richTextBox3->Text = C->ToString();
 		}
+		else MessageBox::Show("Введите число, которое хотите добавить", "Предупреждение");
 	}
 }
 
