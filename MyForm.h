@@ -57,23 +57,24 @@ namespace Множества {
 			for (int j = 0; j < ob->len; j++)
 			{
 				int counter = 0;
-				for (int k = 1; k <= ob->el(j); k++)
+				for (int k = 1; k <= ob[j]; k++)
 				{
-					if (ob->el(j) % k == 0) counter++;
+					if (ob[j] % k == 0) counter++;
 				}
-				if (counter == 2) B->Add(ob->el(j));
-				if (ob->el(j) == 1 || ob->el(j) == 0) B->Add(ob->el(j));
+				if (counter == 2) B->Add(ob[j]);
+				if (ob[j] == 1 || ob[j] == 0) B->Add(ob[j]);
 			}
 			return B;
 		}
+
 		My_Set^ even(My_Set^ ob)
 		{
 			My_Set^ B = gcnew My_Set();
 			for (int i = 0; i < ob->len; i++)
 			{
-				if (ob->el(i) % 2 == 0)
+				if (ob[i] % 2 == 0)
 				{
-					B->Add(ob->el(i));
+					B->Add(ob[i]);
 				}
 			}
 			return B;
@@ -96,10 +97,10 @@ namespace Множества {
 			String^ line = gcnew String("");
 			for (int i = 0; i < ob->len - 1; i++)
 			{
-				line = Convert::ToString(ob->el(i)) + "\n";
+				line = Convert::ToString(ob[i]) + "\n";
 				SW->Write(line);
 			}
-			line = Convert::ToString(ob->el(ob->len - 1));
+			line = Convert::ToString(ob[ob->len - 1]);
 			SW->Write(line);
 			SW->Close();
 		}
@@ -253,6 +254,7 @@ namespace Множества {
 			// richTextBox1
 			// 
 			this->richTextBox1->BackColor = System::Drawing::Color::SeaGreen;
+			this->richTextBox1->Enabled = false;
 			this->richTextBox1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->richTextBox1->Location = System::Drawing::Point(24, 58);
@@ -264,6 +266,7 @@ namespace Множества {
 			// richTextBox2
 			// 
 			this->richTextBox2->BackColor = System::Drawing::Color::SeaGreen;
+			this->richTextBox2->Enabled = false;
 			this->richTextBox2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->richTextBox2->Location = System::Drawing::Point(24, 146);
@@ -275,6 +278,7 @@ namespace Множества {
 			// richTextBox3
 			// 
 			this->richTextBox3->BackColor = System::Drawing::Color::SeaGreen;
+			this->richTextBox3->Enabled = false;
 			this->richTextBox3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->richTextBox3->Location = System::Drawing::Point(24, 242);

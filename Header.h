@@ -36,10 +36,6 @@ public:
 		A = gcnew array <int>(MAX_SIZE);
 		Count = 0;
 	}
-	My_Set(array <int>^ mas, int len)
-	{
-		
-	}
 
 	property int len
 	{
@@ -47,12 +43,6 @@ public:
 		{
 			return Count;
 		}
-	}
-	//Лен - получить длину множества
-
-	int el(int i) //Можем взять элемент по индексу
-	{
-		return A[i];
 	}
 
 	bool Add(int a)
@@ -113,6 +103,10 @@ public:
 			this->A[i] = other->A[i];
 		}
 		return this;
+	}
+	int operator [](int i)
+	{
+		return A[i];
 	}
 
 	virtual String^ ToString() override 
