@@ -23,7 +23,6 @@ namespace Множества {
 			//TODO: добавьте код конструктора
 			//
 			A = gcnew My_Set();
-			A->write_from_file("Числа.txt");
 			B = gcnew My_Set();
 			C = gcnew My_Set();
 		}
@@ -41,38 +40,75 @@ namespace Множества {
 		}
 		My_Set ^A; //Изначальное множество
 		My_Set ^B; //Множество простых чисел
-		My_Set ^C; //Множество четных чисел
+		My_Set^ C; //Множество четных чисел
+	private: System::Windows::Forms::RichTextBox^ richTextBox1;
+	protected:
+	private: System::Windows::Forms::RichTextBox^ richTextBox2;
+	private: System::Windows::Forms::RichTextBox^ richTextBox3;
+
+	protected:
+
+
+
+
 		My_Set^ simple(My_Set^ ob)
 		{
 			My_Set^ B = gcnew My_Set();
 			for (int j = 0; j < ob->len; j++)
 			{
 				int counter = 0;
-				for (int k = 1; k <= ob->len; k++)
+				for (int k = 1; k <= ob->el(j); k++)
 				{
-					if (Convert::ToInt32(ob->el(j)) % k == 0) counter++;
+					if (ob->el(j) % k == 0) counter++;
 				}
-				if (counter == 2) B->Add(Convert::ToInt32(ob->el(j)));
+				if (counter == 2) B->Add(ob->el(j));
+				if (ob->el(j) == 1 || ob->el(j) == 0) B->Add(ob->el(j));
 			}
 			return B;
 		}
 		My_Set^ even(My_Set^ ob)
 		{
 			My_Set^ B = gcnew My_Set();
-			for (int i; i < ob->len; i++)
+			for (int i = 0; i < ob->len; i++)
 			{
-				if (Convert::ToInt32(ob->el(i)) % 2 == 0)
+				if (ob->el(i) % 2 == 0)
 				{
-					B->Add(Convert::ToInt32(ob->el(i)));
+					B->Add(ob->el(i));
 				}
 			}
 			return B;
 		}
+
+		void write_set(My_Set^ ob, String^ File)
+		{
+			StreamReader^ SR = gcnew StreamReader(File);
+			String^ str = gcnew String("");
+			while (str = SR->ReadLine())
+			{
+				ob->Add(Convert::ToInt32(str));
+			}
+			SR->Close();
+		}
+
+		void update_set(My_Set^ ob, String^ File)
+		{
+			StreamWriter^ SW = gcnew StreamWriter(File);
+			String^ line = gcnew String("");
+			for (int i = 0; i < ob->len - 1; i++)
+			{
+				line = Convert::ToString(ob->el(i)) + "\n";
+				SW->Write(line);
+			}
+			line = Convert::ToString(ob->el(ob->len - 1));
+			SW->Write(line);
+			SW->Close();
+		}
+
 	private: System::Windows::Forms::Label^ label1;
 	protected:
-	private: System::Windows::Forms::RichTextBox^ richTextBox1;
-	private: System::Windows::Forms::RichTextBox^ richTextBox2;
-	private: System::Windows::Forms::RichTextBox^ richTextBox3;
+
+
+
 	private: System::Windows::Forms::TextBox^ textBox1;
 	private: System::Windows::Forms::Button^ button2;
 	private: System::Windows::Forms::TextBox^ textBox2;
@@ -99,9 +135,6 @@ namespace Множества {
 		{
 			System::ComponentModel::ComponentResourceManager^ resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 			this->label1 = (gcnew System::Windows::Forms::Label());
-			this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
-			this->richTextBox2 = (gcnew System::Windows::Forms::RichTextBox());
-			this->richTextBox3 = (gcnew System::Windows::Forms::RichTextBox());
 			this->textBox1 = (gcnew System::Windows::Forms::TextBox());
 			this->button2 = (gcnew System::Windows::Forms::Button());
 			this->textBox2 = (gcnew System::Windows::Forms::TextBox());
@@ -110,6 +143,9 @@ namespace Множества {
 			this->label2 = (gcnew System::Windows::Forms::Label());
 			this->label3 = (gcnew System::Windows::Forms::Label());
 			this->button3 = (gcnew System::Windows::Forms::Button());
+			this->richTextBox1 = (gcnew System::Windows::Forms::RichTextBox());
+			this->richTextBox2 = (gcnew System::Windows::Forms::RichTextBox());
+			this->richTextBox3 = (gcnew System::Windows::Forms::RichTextBox());
 			this->groupBox1->SuspendLayout();
 			this->SuspendLayout();
 			// 
@@ -124,33 +160,6 @@ namespace Множества {
 			this->label1->Size = System::Drawing::Size(95, 17);
 			this->label1->TabIndex = 0;
 			this->label1->Text = L"Множество:";
-			// 
-			// richTextBox1
-			// 
-			this->richTextBox1->Enabled = false;
-			this->richTextBox1->Location = System::Drawing::Point(24, 49);
-			this->richTextBox1->Name = L"richTextBox1";
-			this->richTextBox1->Size = System::Drawing::Size(454, 48);
-			this->richTextBox1->TabIndex = 1;
-			this->richTextBox1->Text = L"";
-			// 
-			// richTextBox2
-			// 
-			this->richTextBox2->Enabled = false;
-			this->richTextBox2->Location = System::Drawing::Point(24, 190);
-			this->richTextBox2->Name = L"richTextBox2";
-			this->richTextBox2->Size = System::Drawing::Size(211, 28);
-			this->richTextBox2->TabIndex = 3;
-			this->richTextBox2->Text = L"";
-			// 
-			// richTextBox3
-			// 
-			this->richTextBox3->Enabled = false;
-			this->richTextBox3->Location = System::Drawing::Point(24, 127);
-			this->richTextBox3->Name = L"richTextBox3";
-			this->richTextBox3->Size = System::Drawing::Size(211, 28);
-			this->richTextBox3->TabIndex = 4;
-			this->richTextBox3->Text = L"";
 			// 
 			// textBox1
 			// 
@@ -197,7 +206,7 @@ namespace Множества {
 			this->groupBox1->Controls->Add(this->textBox1);
 			this->groupBox1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->groupBox1->Location = System::Drawing::Point(250, 103);
+			this->groupBox1->Location = System::Drawing::Point(447, 83);
 			this->groupBox1->Name = L"groupBox1";
 			this->groupBox1->Size = System::Drawing::Size(273, 128);
 			this->groupBox1->TabIndex = 9;
@@ -210,7 +219,7 @@ namespace Множества {
 			this->label2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->label2->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"label2.Image")));
-			this->label2->Location = System::Drawing::Point(21, 170);
+			this->label2->Location = System::Drawing::Point(21, 126);
 			this->label2->Name = L"label2";
 			this->label2->Size = System::Drawing::Size(119, 17);
 			this->label2->TabIndex = 10;
@@ -222,7 +231,7 @@ namespace Множества {
 			this->label3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
 			this->label3->Image = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"label3.Image")));
-			this->label3->Location = System::Drawing::Point(21, 109);
+			this->label3->Location = System::Drawing::Point(21, 222);
 			this->label3->Name = L"label3";
 			this->label3->Size = System::Drawing::Size(127, 17);
 			this->label3->TabIndex = 11;
@@ -233,27 +242,60 @@ namespace Множества {
 			this->button3->BackColor = System::Drawing::Color::LightGreen;
 			this->button3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
 				static_cast<System::Byte>(204)));
-			this->button3->Location = System::Drawing::Point(357, 237);
+			this->button3->Location = System::Drawing::Point(535, 281);
 			this->button3->Name = L"button3";
-			this->button3->Size = System::Drawing::Size(144, 28);
+			this->button3->Size = System::Drawing::Size(185, 28);
 			this->button3->TabIndex = 9;
 			this->button3->Text = L"Закрыть";
 			this->button3->UseVisualStyleBackColor = false;
 			this->button3->Click += gcnew System::EventHandler(this, &MyForm::button3_Click);
+			// 
+			// richTextBox1
+			// 
+			this->richTextBox1->BackColor = System::Drawing::Color::SeaGreen;
+			this->richTextBox1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->richTextBox1->Location = System::Drawing::Point(24, 58);
+			this->richTextBox1->Name = L"richTextBox1";
+			this->richTextBox1->Size = System::Drawing::Size(397, 65);
+			this->richTextBox1->TabIndex = 15;
+			this->richTextBox1->Text = L"";
+			// 
+			// richTextBox2
+			// 
+			this->richTextBox2->BackColor = System::Drawing::Color::SeaGreen;
+			this->richTextBox2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->richTextBox2->Location = System::Drawing::Point(24, 146);
+			this->richTextBox2->Name = L"richTextBox2";
+			this->richTextBox2->Size = System::Drawing::Size(397, 73);
+			this->richTextBox2->TabIndex = 16;
+			this->richTextBox2->Text = L"";
+			// 
+			// richTextBox3
+			// 
+			this->richTextBox3->BackColor = System::Drawing::Color::SeaGreen;
+			this->richTextBox3->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 7.8F, System::Drawing::FontStyle::Bold, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(204)));
+			this->richTextBox3->Location = System::Drawing::Point(24, 242);
+			this->richTextBox3->Name = L"richTextBox3";
+			this->richTextBox3->Size = System::Drawing::Size(397, 67);
+			this->richTextBox3->TabIndex = 17;
+			this->richTextBox3->Text = L"";
 			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(8, 16);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackgroundImage = (cli::safe_cast<System::Drawing::Image^>(resources->GetObject(L"$this.BackgroundImage")));
-			this->ClientSize = System::Drawing::Size(542, 284);
+			this->ClientSize = System::Drawing::Size(734, 338);
+			this->Controls->Add(this->richTextBox3);
+			this->Controls->Add(this->richTextBox2);
+			this->Controls->Add(this->richTextBox1);
 			this->Controls->Add(this->button3);
 			this->Controls->Add(this->label3);
 			this->Controls->Add(this->label2);
 			this->Controls->Add(this->groupBox1);
-			this->Controls->Add(this->richTextBox3);
-			this->Controls->Add(this->richTextBox2);
-			this->Controls->Add(this->richTextBox1);
 			this->Controls->Add(this->label1);
 			this->Name = L"MyForm";
 			this->StartPosition = System::Windows::Forms::FormStartPosition::CenterScreen;
@@ -277,15 +319,15 @@ namespace Множества {
 		{
 			if (textBox2->Text != "")
 			{
-				A = A - Convert::ToInt32(textBox2->Text);
-				this->richTextBox1->Text = A->ToString();
-				A->write_in_file("Числа.txt");
+				A->Delete(Convert::ToInt32(textBox2->Text));
+				update_set(A, "Числа.txt");
+				richTextBox1->Text = A->ToString();
 
-				B->operator=(even(A));
-				this->richTextBox2->Text = B->ToString();
+				B = even(A);
+				richTextBox2->Text = B->ToString();
 
-				C->operator=(simple(A));
-				this->richTextBox3->Text = C->ToString();
+				C = simple(A);
+				richTextBox3->Text = C->ToString();
 
 			}
 		}
@@ -295,13 +337,15 @@ private: System::Void button3_Click(System::Object^ sender, System::EventArgs^ e
 }
 
 private: System::Void MyForm_Load(System::Object^ sender, System::EventArgs^ e) {
-	this->richTextBox1->Text = A->ToString();
+	write_set(A, "Числа.txt");
+	richTextBox1->Text = A->ToString();
 
-	B->operator=(even(A));
-	this->richTextBox2->Text = B->ToString();
+	B = even(A);
+	richTextBox2->Text = B->ToString();
 
-	C->operator=(simple(A));
-	this->richTextBox3->Text = C->ToString();
+	C = simple(A);
+	richTextBox3->Text = C->ToString();
+
 
 }
 private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e)
@@ -315,17 +359,18 @@ private: System::Void button2_Click(System::Object^ sender, System::EventArgs^ e
 	{
 		if (textBox1->Text != "")
 		{
-			A = A + Convert::ToInt32(textBox1->Text);
-			this->richTextBox1->Text = A->ToString();
-			A->write_in_file("Числа.txt");
+			A->Add(Convert::ToInt32(textBox1->Text));
+			update_set(A, "Числа.txt");
+			richTextBox1->Text = A->ToString();
 
-			B->operator=(even(A));
-			this->richTextBox2->Text = B->ToString();
+			B = even(A);
+			richTextBox2->Text = B->ToString();
 
-			C->operator=(simple(A));
-			this->richTextBox3->Text = C->ToString();
+			C = simple(A);
+			richTextBox3->Text = C->ToString();
 		}
 	}
 }
+
 };
 }
